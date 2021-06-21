@@ -1,0 +1,29 @@
+{
+  "string": "This is a String",
+  "string-containing-numbers": "This String contains 2 numbers 1",
+  "string-starting-with-number": "10 This String starts with 10",
+  "string-containing-other-chars": "This String contains \"!§$%&/{}[]()=?\\@€|><,.-;:_+#\"",
+  "string-starting-with-other-chars": ",.-!§${}[] String :)",
+  "number": 1234,
+  "decimal-number": 1234.567,
+  "negative-number": -12,
+  "negative-decimal-number": -123.45,
+  "binary-number": 1e2,
+  "unicode-string": "\u015a",
+  "null" : null,
+  "object": {
+    "val1": "val1",
+    "val2": 2
+  },
+  "object-inside-object": {
+    "sub-object": {
+      "val1": "val1",
+      "val2": 2
+    }
+  },
+  "array": [
+    1,
+    2,
+    3
+  ]
+}

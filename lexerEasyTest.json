@@ -1,0 +1,19 @@
+{
+  "name": "name",
+  "alter": 2,
+  "obj": {
+    "val1": true,
+    "val2": false,
+    "val3": 3.2
+  },
+  "list": [
+    1,
+    2,
+    3,
+    {
+      "test": "test",
+      "num": 2,
+      "bool": true
+    }
+  ]
+}
