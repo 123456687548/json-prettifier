@@ -1,3 +1,5 @@
+import kotlin.jvm.Throws
+
 @ExperimentalStdlibApi
 class Lexer(input: String) {
     private val iter: PeekableIterator<Char> = PeekableIterator(input.iterator())
@@ -22,6 +24,7 @@ class Lexer(input: String) {
         }
     }
 
+    @Throws(NotPermittedCharExeption::class, InvalidUnicodeEscapeSequenceExeption::class, UnterminatedStringExeption::class)
     private fun lexString(): Token {
         var result = ""
         var char: Char
@@ -69,22 +72,38 @@ class Lexer(input: String) {
     }
 
     private fun lexDefault(c: Char): Token {
-        var char: Char
-
         return when (c) {
             't',
             'f',
-            'n' ->  lexLiteral(c)
+            'n' -> lexLiteral(c)
             else -> lexNumber(c)
         }
     }
 
+    @Throws(NumberFormatException::class)
     private fun lexNumber(c: Char): Token {
         var result = c.toString()
+        var char: Char
+        var isDecimal = false
 
-        throw NotANumberExeption("$result is not a Number")
+        while (iter.hasNext()) {
+            char = iter.peek()
+
+            if (!(char.isDigit() || char == '.')) {
+                if (char == '.' && isDecimal) throw NumberFormatException("Number contains multiple dots")
+                break
+            }
+            iter.next()
+            if (char == '.') isDecimal = true
+
+            result += char
+        }
+
+        return if (isDecimal) Token.DECIMAL_NUMBER_LIT(result.toDouble())
+        else Token.NUMBER_LIT(result.toInt())
     }
 
+    @Throws(LiteralDoesNotExistExeption::class)
     private fun lexLiteral(c: Char): Token {
         var result = c.toString()
 
@@ -121,5 +140,5 @@ class Lexer(input: String) {
     class InvalidUnicodeEscapeSequenceExeption(text: String) : Exception(text)
     class UnterminatedStringExeption(text: String) : Exception(text)
     class LiteralDoesNotExistExeption(text: String) : Exception(text)
-    class NotANumberExeption(text: String) : Exception(text)
+
 }

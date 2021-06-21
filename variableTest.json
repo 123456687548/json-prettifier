@@ -8,7 +8,6 @@
   "decimal-number": 1234.567,
   "negative-number": -12,
   "negative-decimal-number": -123.45,
-  "binary-number": 1e2,
   "unicode-string": "\u015a",
   "null" : null,
   "object": {

@@ -8,7 +8,6 @@ sealed class Token {
     object COMMA : Token()
     object LSQUARE : Token()
     object RSQUARE : Token()
-    object QUOTATION : Token()
     object COLON : Token()
 
     data class STRING(val string: String) : Token()
