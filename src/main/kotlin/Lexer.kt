@@ -1,7 +1,11 @@
 import kotlin.jvm.Throws
 
+fun fixJsonEscapeShit(json : String) : String{
+    return json.replace("\"", "\\\\\\\"")
+}
+
 @ExperimentalStdlibApi
-class Lexer(input: String) {
+class Lexer(private val input: String) {
     private val iter: PeekableIterator<Char> = PeekableIterator(input.iterator())
     private var lookahead: Token? = null
 
@@ -140,5 +144,4 @@ class Lexer(input: String) {
     class InvalidUnicodeEscapeSequenceExeption(text: String) : Exception(text)
     class UnterminatedStringExeption(text: String) : Exception(text)
     class LiteralDoesNotExistExeption(text: String) : Exception(text)
-
 }

@@ -8,13 +8,14 @@ internal class LexerTest {
     fun testStrings() {
         println("Running test: ${object {}.javaClass.enclosingMethod.name}\n")
 
-        testCase("\"\"", Token.STRING(""))
-        testCase("\"t\"", Token.STRING("t"))
-        testCase("\"Test\"", Token.STRING("Test"))
-        testCase("\"1234 Test\"", Token.STRING("1234 Test"))
-        testCase("\"1234 Test 1234\"", Token.STRING("1234 Test 1234"))
-        testCase("\"1234 Tes2t 1234\"", Token.STRING("1234 Tes2t 1234"))
-        testCase("\"hi \\u0066\"", Token.STRING("hi \\u0066"))
+//        testCase("\"\"", Token.STRING(""))
+//        testCase("\"t\"", Token.STRING("t"))
+//        testCase("\"Test\"", Token.STRING("Test"))
+//        testCase("\"1234 Test\"", Token.STRING("1234 Test"))
+//        testCase("\"1234 Test 1234\"", Token.STRING("1234 Test 1234"))
+//        testCase("\"1234 Tes2t 1234\"", Token.STRING("1234 Tes2t 1234"))
+//        testCase("\"hi \\u0066\"", Token.STRING("hi \\u0066"))
+        testCase("\"This String contains \\\"!§\$%&/{}[]()=?\\\\@€|><,.-;:_+#\\\"\"\"", Token.STRING("This String contains \\\"!§\$%&/{}[]()=?\\@€|><,.-;:_+#\\\""))
     }
 
     @Test
@@ -132,21 +133,25 @@ internal class LexerTest {
 
     private fun testCase(json: String, expectedResult: Token) {
         val lexer = Lexer(json)
-        val token = lexer.next()
-        println("JSON: $json\nExpected: $expectedResult - Result: $token")
-        assertEquals(expectedResult, token)
+        val result = lexer.next()
+
+        println("JSON: $json\nExpected: $expectedResult - Result: $result")
+
+        assertEquals(expectedResult, result)
         println()
     }
 
     private fun testCase(json: String, expectedResult: List<Token>) {
         val lexer = Lexer(json)
         val iter = expectedResult.iterator()
+
         println("JSON: $json\nExpected List: $expectedResult\n")
+
         while (iter.hasNext()) {
-            val token = lexer.next()
+            val result = lexer.next()
             val expectedToken = iter.next()
-            println("Expected: $expectedToken - Result: $token")
-            assertEquals(expectedToken, token)
+            println("Expected: $expectedToken - Result: $result")
+            assertEquals(expectedToken, result)
         }
         println()
     }
