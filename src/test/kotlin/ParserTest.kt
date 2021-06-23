@@ -22,12 +22,12 @@ internal class ParserTest {
     fun testNumbers() {
         println("Running test: ${object {}.javaClass.enclosingMethod.name}\n")
 
-//        testCase("1", JsonDataType.JSON_NUMBER(1))
-//        testCase("1.0", JsonDataType.JSON_DECIMAL_NUMBER(1.0))
-//        testCase("1.2", JsonDataType.JSON_DECIMAL_NUMBER(1.2))
-//        testCase("1.234", JsonDataType.JSON_DECIMAL_NUMBER(1.234))
-//        testCase("-1", JsonDataType.JSON_NUMBER(-1))
-//        testCase("-1.2", JsonDataType.JSON_DECIMAL_NUMBER(-1.2))
+        testCase("1", JsonDataType.JSON_NUMBER("1"))
+        testCase("1.0", JsonDataType.JSON_NUMBER("1.0"))
+        testCase("1.2", JsonDataType.JSON_NUMBER("1.2"))
+        testCase("1.234", JsonDataType.JSON_NUMBER("1.234"))
+        testCase("-1", JsonDataType.JSON_NUMBER("-1"))
+        testCase("-1.2", JsonDataType.JSON_NUMBER("-1.2"))
         testCase("1e4", JsonDataType.JSON_NUMBER("1e4"))
     }
 
