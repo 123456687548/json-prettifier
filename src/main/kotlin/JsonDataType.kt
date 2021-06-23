@@ -2,6 +2,7 @@ sealed class JsonDataType {
     open fun prettyPrint(indent: Int = 0): String = toString()
 
     data class JSON_STRING(val string: String) : JsonDataType() {
+        @ExperimentalStdlibApi
         override fun toString(): String {
             val result = string
                 .replace("\\", "\\\\")
@@ -11,21 +12,19 @@ sealed class JsonDataType {
                 .replace("\n", "\\n")
                 .replace("\r", "\\r")
 
-            //todo unicode
+            val sb = StringBuilder()
 
-            return "\"$result\""
+            result.forEach {
+                sb.append(replaceCharWithUnicode(it))
+            }
+
+            return "\"${sb}\""
         }
     }
 
-    data class JSON_NUMBER(val number: Int) : JsonDataType() {
+    data class JSON_NUMBER(val number: String) : JsonDataType() {
         override fun toString(): String {
-            return "$number"
-        }
-    }
-
-    data class JSON_DECIMAL_NUMBER(val number: Double) : JsonDataType() {
-        override fun toString(): String {
-            return "$number"
+            return number
         }
     }
 

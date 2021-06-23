@@ -20,10 +20,10 @@ class Parser(private val lexer: Lexer) {
                 lexer.next()
                 JsonDataType.JSON_NUMBER(token.number)
             }
-            is Token.DECIMAL_NUMBER_LIT -> {
-                lexer.next()
-                JsonDataType.JSON_DECIMAL_NUMBER(token.number)
-            }
+//            is Token.DECIMAL_NUMBER_LIT -> {
+//                lexer.next()
+//                JsonDataType.JSON_DECIMAL_NUMBER(token.number)
+//            }
             Token.NULL_LIT -> {
                 lexer.next()
                 JsonDataType.JSON_NULL

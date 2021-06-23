@@ -15,20 +15,20 @@ internal class LexerTest {
         testCase("\"1234 Test 1234\"", Token.STRING("1234 Test 1234"))
         testCase("\"1234 Tes2t 1234\"", Token.STRING("1234 Tes2t 1234"))
         testCase("\"hi \\uFDFA\"", Token.STRING("hi ﷺ"))
-        testCase("\"This String contains \\\"!§\$%&/{}[]()=?\\@€|><,.-;:_+#\\\"\"\"", Token.STRING("This String contains \"!§\$%&/{}[]()=?\\@€|><,.-;:_+#\""))
+        testCase("\"This String contains \\\"!§\$%&/{}[]()=?\\\\@€|><,.-;:_+#\\\"\"\"", Token.STRING("This String contains \"!§\$%&/{}[]()=?\\@€|><,.-;:_+#\""))
     }
 
     @Test
     fun testNumbers() {
         println("Running test: ${object {}.javaClass.enclosingMethod.name}\n")
 
-        testCase("1", Token.NUMBER_LIT(1))
-        testCase("1.0", Token.DECIMAL_NUMBER_LIT(1.0))
-        testCase("1.2", Token.DECIMAL_NUMBER_LIT(1.2))
-        testCase("1.234", Token.DECIMAL_NUMBER_LIT(1.234))
-        testCase("-1", Token.NUMBER_LIT(-1))
-        testCase("-1.2", Token.DECIMAL_NUMBER_LIT(-1.2))
-//        testCase("1e10", Token.NUMBER_LIT(1e10))
+        testCase("1", Token.NUMBER_LIT("1"))
+        testCase("1.0", Token.NUMBER_LIT("1.0"))
+        testCase("1.2", Token.NUMBER_LIT("1.2"))
+        testCase("1.234", Token.NUMBER_LIT("1.234"))
+        testCase("-1", Token.NUMBER_LIT("-1"))
+        testCase("-1.2", Token.NUMBER_LIT("-1.2"))
+        testCase("1e10", Token.NUMBER_LIT("1e10"))
     }
 
     @Test
@@ -53,27 +53,27 @@ internal class LexerTest {
         testCase(
             "[1]", listOf(
                 Token.LSQUARE,
-                Token.NUMBER_LIT(1),
+                Token.NUMBER_LIT("1"),
                 Token.RSQUARE
             )
         )
         testCase(
             "[1,2]", listOf(
                 Token.LSQUARE,
-                Token.NUMBER_LIT(1),
+                Token.NUMBER_LIT("1"),
                 Token.COMMA,
-                Token.NUMBER_LIT(2),
+                Token.NUMBER_LIT("2"),
                 Token.RSQUARE
             )
         )
         testCase(
             "[1,true,2,\"test\"]", listOf(
                 Token.LSQUARE,
-                Token.NUMBER_LIT(1),
+                Token.NUMBER_LIT("1"),
                 Token.COMMA,
                 Token.BOOLEAN_LIT(true),
                 Token.COMMA,
-                Token.NUMBER_LIT(2),
+                Token.NUMBER_LIT("2"),
                 Token.COMMA,
                 Token.STRING("test"),
                 Token.RSQUARE
@@ -114,7 +114,7 @@ internal class LexerTest {
                 Token.COMMA,
                 Token.STRING("val2"),
                 Token.COLON,
-                Token.NUMBER_LIT(2),
+                Token.NUMBER_LIT("2"),
                 Token.RCURLY,
                 Token.RCURLY
             )

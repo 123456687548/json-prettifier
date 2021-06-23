@@ -15,20 +15,20 @@ internal class ParserTest {
         testCase("\"1234 Test\"", JsonDataType.JSON_STRING("1234 Test"))
         testCase("\"1234 Test 1234\"", JsonDataType.JSON_STRING("1234 Test 1234"))
         testCase("\"1234 Tes2t 1234\"", JsonDataType.JSON_STRING("1234 Tes2t 1234"))
-        testCase("\"hi \\u0066\"", JsonDataType.JSON_STRING("hi \\u0066"))
+        testCase("\"hi ﷺ\"", JsonDataType.JSON_STRING("hi \uFDFA"))
     }
 
     @Test
     fun testNumbers() {
         println("Running test: ${object {}.javaClass.enclosingMethod.name}\n")
 
-        testCase("1", JsonDataType.JSON_NUMBER(1))
-        testCase("1.0", JsonDataType.JSON_DECIMAL_NUMBER(1.0))
-        testCase("1.2", JsonDataType.JSON_DECIMAL_NUMBER(1.2))
-        testCase("1.234", JsonDataType.JSON_DECIMAL_NUMBER(1.234))
-        testCase("-1", JsonDataType.JSON_NUMBER(-1))
-        testCase("-1.2", JsonDataType.JSON_DECIMAL_NUMBER(-1.2))
-//        testCase("1e10", JsonDataType.JSON_NUMBER(1e10))
+//        testCase("1", JsonDataType.JSON_NUMBER(1))
+//        testCase("1.0", JsonDataType.JSON_DECIMAL_NUMBER(1.0))
+//        testCase("1.2", JsonDataType.JSON_DECIMAL_NUMBER(1.2))
+//        testCase("1.234", JsonDataType.JSON_DECIMAL_NUMBER(1.234))
+//        testCase("-1", JsonDataType.JSON_NUMBER(-1))
+//        testCase("-1.2", JsonDataType.JSON_DECIMAL_NUMBER(-1.2))
+        testCase("1e4", JsonDataType.JSON_NUMBER("1e4"))
     }
 
     @Test
@@ -45,12 +45,12 @@ internal class ParserTest {
         println("Running test: ${object {}.javaClass.enclosingMethod.name}\n")
 
         testCase("[]", JsonDataType.JSON_ARRAY(listOf()))
-        testCase("[1]", JsonDataType.JSON_ARRAY(listOf(JsonDataType.JSON_NUMBER(1))))
-        testCase("[1,2]", JsonDataType.JSON_ARRAY(listOf(JsonDataType.JSON_NUMBER(1), JsonDataType.JSON_NUMBER(2))))
+        testCase("[1]", JsonDataType.JSON_ARRAY(listOf(JsonDataType.JSON_NUMBER("1"))))
+        testCase("[1,2]", JsonDataType.JSON_ARRAY(listOf(JsonDataType.JSON_NUMBER("1"), JsonDataType.JSON_NUMBER("2"))))
         testCase(
             "[1,true,2,\"test\"]", JsonDataType.JSON_ARRAY(
                 listOf(
-                    JsonDataType.JSON_NUMBER(1), JsonDataType.JSON_BOOL(true), JsonDataType.JSON_NUMBER(2), JsonDataType.JSON_STRING("test")
+                    JsonDataType.JSON_NUMBER("1"), JsonDataType.JSON_BOOL(true), JsonDataType.JSON_NUMBER("2"), JsonDataType.JSON_STRING("test")
                 )
             )
         )
@@ -95,7 +95,7 @@ internal class ParserTest {
                                             ),
                                             Pair(
                                                 JsonDataType.JSON_STRING("val2"),
-                                                JsonDataType.JSON_NUMBER(2),
+                                                JsonDataType.JSON_NUMBER("2"),
                                             )
                                         )
                                     )

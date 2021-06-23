@@ -44,7 +44,7 @@ class Lexer(private val input: String) {
                     'n' -> result.append('\n')
 //                    'f' -> result.append('\f')
                     'r' -> result.append('\r')
-                    'u' -> { //unicode excape //todo parsen
+                    'u' -> { //unicode excape
                         var charCode: Int
                         var temp = ""
                         for (i in 0..3) {
@@ -56,7 +56,9 @@ class Lexer(private val input: String) {
                             }
                             temp += char
                         }
-                        result.append("\\u${temp}")
+
+
+                        result.append((Integer.parseInt(temp, 16)).toChar())
                     }
                 }
             } else {
@@ -89,18 +91,17 @@ class Lexer(private val input: String) {
         while (iter.hasNext()) {
             char = iter.peek()
 
-            if (!(char.isDigit() || char == '.')) {
+            if (!(char.isDigit() || (char == '.' || char == 'e'))) {
                 if (char == '.' && isDecimal) throw NumberFormatException("Number contains multiple dots")
                 break
             }
             iter.next()
-            if (char == '.') isDecimal = true
+            if (char == '.' || char == 'e') isDecimal = true
 
             result.append(char)
         }
 
-        return if (isDecimal) Token.DECIMAL_NUMBER_LIT(result.toString().toDouble())
-        else Token.NUMBER_LIT(result.toString().toInt())
+        return Token.NUMBER_LIT(result.toString())
     }
 
     @Throws(LiteralDoesNotExistExeption::class)

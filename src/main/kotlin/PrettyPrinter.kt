@@ -17,6 +17,14 @@ fun getTabs(indent: Int): String {
     return retVal.toString()
 }
 
+@ExperimentalStdlibApi
+fun replaceCharWithUnicode(char: Char): String {
+    if(char.code > 255){ //todo bereich besser eingrenzen
+        return "\\u${char.code.toString(16).uppercase()}"
+    }
+    return char.toString()
+}
+
 //todo aufräumen
 
 @ExperimentalStdlibApi
