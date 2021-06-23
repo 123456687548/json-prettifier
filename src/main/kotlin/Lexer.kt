@@ -30,7 +30,7 @@ class Lexer(private val input: String) {
 
     @Throws(NotPermittedCharExeption::class, InvalidUnicodeEscapeSequenceExeption::class, UnterminatedStringExeption::class)
     private fun lexString(): Token {
-        var result = ""
+        val result = StringBuilder()
         var char: Char
         while (iter.hasNext()) {
             char = iter.next()
@@ -40,14 +40,14 @@ class Lexer(private val input: String) {
             } else if (char == '\\') {
                 char = iter.next()
                 when (char) {
-                    '\\' -> result += '\\'
-                    '"' -> result += '"'
-                    '/' -> result += '/'
-                    'b' -> result += '\b'
-                    't' -> result += '\t'
-                    'n' -> result += '\n'
-//                    'f' -> result += '\f'
-                    'r' -> result += '\r'
+                    '\\' -> result.append('\\')
+                    '"' -> result.append("'")
+                    '/' -> result.append('/')
+                    'b' -> result.append('\b')
+                    't' -> result.append('\t')
+                    'n' -> result.append('\n')
+//                    'f' -> result.append('\f')
+                    'r' -> result.append('\r')
                     'u' -> { //unicode excape
                         var charCode: Int
                         var temp = ""
@@ -60,15 +60,15 @@ class Lexer(private val input: String) {
                             }
                             temp += char
                         }
-                        result += "\\u${temp}"
+                        result.append("\\u${temp}")
                     }
                 }
             } else {
                 if (char == '"') { // end of string
-                    return Token.STRING(result)
+                    return Token.STRING(result.toString())
                 }
 
-                result += char
+                result.append(char)
             }
         }
 
@@ -86,7 +86,7 @@ class Lexer(private val input: String) {
 
     @Throws(NumberFormatException::class)
     private fun lexNumber(c: Char): Token {
-        var result = c.toString()
+        val result = StringBuilder(c.toString())
         var char: Char
         var isDecimal = false
 
@@ -100,21 +100,23 @@ class Lexer(private val input: String) {
             iter.next()
             if (char == '.') isDecimal = true
 
-            result += char
+            result.append(char)
         }
 
-        return if (isDecimal) Token.DECIMAL_NUMBER_LIT(result.toDouble())
-        else Token.NUMBER_LIT(result.toInt())
+        return if (isDecimal) Token.DECIMAL_NUMBER_LIT(result.toString().toDouble())
+        else Token.NUMBER_LIT(result.toString().toInt())
     }
 
     @Throws(LiteralDoesNotExistExeption::class)
     private fun lexLiteral(c: Char): Token {
-        var result = c.toString()
+        val resultBuilder = StringBuilder(c.toString())
 
         for (i in 0..2) {
-            if (!iter.hasNext()) throw LiteralDoesNotExistExeption("$result Literal does not exist")
-            result += iter.next()
+            if (!iter.hasNext()) throw LiteralDoesNotExistExeption("$resultBuilder Literal does not exist")
+            resultBuilder.append(iter.next())
         }
+
+        val result = resultBuilder.toString()
 
         if (result == "true") {
             return Token.BOOLEAN_LIT(true)
