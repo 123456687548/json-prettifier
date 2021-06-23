@@ -81,3 +81,22 @@ sealed class JsonDataType {
         }
     }
 }
+
+//todo settings for indent
+fun getTabs(indent: Int): String {
+    val retVal = StringBuilder()
+
+    for (i in 1..indent) {
+        retVal.append("    ")
+    }
+
+    return retVal.toString()
+}
+
+@ExperimentalStdlibApi
+fun replaceCharWithUnicode(char: Char): String {
+    if(char.code > 255){ //todo bereich besser eingrenzen
+        return "\\u${char.code.toString(16).uppercase()}"
+    }
+    return char.toString()
+}

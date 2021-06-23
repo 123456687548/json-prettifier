@@ -1,7 +1,7 @@
 import kotlin.jvm.Throws
 
 @ExperimentalStdlibApi
-class Lexer(private val input: String) {
+class Lexer(input: String) {
     private val iter: PeekableIterator<Char> = PeekableIterator(input.iterator())
     private var lookahead: Token? = null
 

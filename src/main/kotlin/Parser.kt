@@ -20,10 +20,6 @@ class Parser(private val lexer: Lexer) {
                 lexer.next()
                 JsonDataType.JSON_NUMBER(token.number)
             }
-//            is Token.DECIMAL_NUMBER_LIT -> {
-//                lexer.next()
-//                JsonDataType.JSON_DECIMAL_NUMBER(token.number)
-//            }
             Token.NULL_LIT -> {
                 lexer.next()
                 JsonDataType.JSON_NULL
@@ -95,20 +91,4 @@ class Parser(private val lexer: Lexer) {
     }
 
     class ParseExeption(text: String) : Exception(text)
-}
-
-@ExperimentalStdlibApi
-fun main() {
-    splitOutStream()
-//    val lexer = Lexer("{\"object-inside-object\": {\n" +
-//            "    \"sub-object\": {\n" +
-//            "      \"val1\": \"val1\",\n" +
-//            "      \"val2\": 2\n" +
-//            "    }\n" +
-//            "  }}")
-    val lexer = Lexer(loadJsonFile("variableTest.json"))
-//    val lexer = Lexer(loadJsonFile())
-    val parser = Parser(lexer)
-    val jsonDataType = parser.parse()
-    println(jsonDataType)
 }
