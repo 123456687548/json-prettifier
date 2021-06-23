@@ -2,32 +2,32 @@
 class PrettyPrinter(private val parser: Parser) {
     fun pretty(): String {
         val parsedValue = parser.parse()
-        val pretty = parsedValue.prettyPrint()
-//        println(pretty)
-        return pretty
+        return parsedValue.prettyPrint()
     }
 }
 
+//todo settings for indent
 fun getTabs(indent: Int): String {
-    var retVal = ""
+    val retVal = StringBuilder()
 
     for (i in 1..indent) {
-        retVal += "\t"
+        retVal.append("    ")
     }
 
-    return retVal
+    return retVal.toString()
 }
 
+//todo aufräumen
 
 @ExperimentalStdlibApi
 fun main() {
     splitOutStream()
 //    println(loadJsonFile("variableTest.json").replace("\\", "\\\\"))
-//    val lexer = Lexer(loadJsonFile("variableTest.json"))
+    val lexer = Lexer(loadJsonFile("variableTest.json"))
 
-    val lexer = Lexer(loadJsonFile())
+//    val lexer = Lexer(loadJsonFile())
     val parser = Parser(lexer)
-//
+
     val prettier = PrettyPrinter(parser)
 
     saveJsonFile(prettier.pretty())

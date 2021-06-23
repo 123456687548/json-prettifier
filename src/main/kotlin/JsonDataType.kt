@@ -3,7 +3,17 @@ sealed class JsonDataType {
 
     data class JSON_STRING(val string: String) : JsonDataType() {
         override fun toString(): String {
-            return "\"$string\""
+            val result = string
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\b", "\\b")
+                .replace("\t", "\\t")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+
+            //todo unicode
+
+            return "\"$result\""
         }
     }
 
@@ -33,14 +43,14 @@ sealed class JsonDataType {
 
     data class JSON_OBJECT(val pairs: Map<JSON_STRING, JsonDataType>) : JsonDataType() {
         override fun prettyPrint(indent: Int): String {
-            var result = StringBuilder("{\n")
+            val result = StringBuilder("{\n")
 
             val iter = pairs.iterator()
             var current: Map.Entry<JSON_STRING, JsonDataType>
 
             while (iter.hasNext()) {
                 current = iter.next()
-                result.append("${getTabs(indent)}\t${current.key.prettyPrint(indent + 1)}: ${current.value.prettyPrint(indent + 1)}")
+                result.append("${getTabs(indent)}    ${current.key.prettyPrint(indent + 1)}: ${current.value.prettyPrint(indent + 1)}")
                 if (iter.hasNext()) {
                     result.append(",\n")
                 }
@@ -54,14 +64,14 @@ sealed class JsonDataType {
 
     data class JSON_ARRAY(val array: List<JsonDataType>) : JsonDataType() {
         override fun prettyPrint(indent: Int): String {
-            var result = StringBuilder("[\n")
+            val result = StringBuilder("[\n")
 
             val iter = array.iterator()
             var current: JsonDataType
 
             while (iter.hasNext()) {
                 current = iter.next()
-                result.append("${getTabs(indent)}\t${current.prettyPrint(indent + 1)}")
+                result.append("${getTabs(indent)}    ${current.prettyPrint(indent + 1)}")
                 if (iter.hasNext()) {
                     result.append(",\n")
                 }
