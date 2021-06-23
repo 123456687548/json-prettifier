@@ -1,3 +1,5 @@
+package util
+
 import java.io.File
 
 fun loadJsonFile(filePath: String = "test.json"): String {

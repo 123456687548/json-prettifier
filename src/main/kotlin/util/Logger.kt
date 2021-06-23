@@ -1,8 +1,10 @@
+package util
+
 import org.apache.commons.io.output.TeeOutputStream
 import java.io.FileOutputStream
 import java.io.PrintStream
 
-fun splitOutStream(){
+fun splitOutStream() {
     val fos = FileOutputStream("log.txt")
     Runtime.getRuntime().addShutdownHook(Thread({
         try {

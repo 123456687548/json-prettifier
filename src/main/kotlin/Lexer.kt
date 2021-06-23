@@ -1,3 +1,4 @@
+import types.Token
 import kotlin.jvm.Throws
 
 @ExperimentalStdlibApi
@@ -24,7 +25,7 @@ class Lexer(input: String) {
         }
     }
 
-    @Throws(NotPermittedCharExeption::class, InvalidUnicodeEscapeSequenceExeption::class, UnterminatedStringExeption::class)
+    @Throws(NotPermittedCharException::class, InvalidUnicodeEscapeSequenceException::class, UnterminatedStringException::class)
     private fun lexString(): Token {
         val result = StringBuilder()
         var char: Char
@@ -32,7 +33,7 @@ class Lexer(input: String) {
             char = iter.next()
 
             if (char.code < 32) {
-                throw NotPermittedCharExeption("Unescaped ASCII control characters are not permitted.")
+                throw NotPermittedCharException("Unescaped ASCII control characters are not permitted.")
             } else if (char == '\\') {
                 char = iter.next()
                 when (char) {
@@ -44,7 +45,7 @@ class Lexer(input: String) {
                     'n' -> result.append('\n')
 //                    'f' -> result.append('\f')
                     'r' -> result.append('\r')
-                    'u' -> { //unicode excape
+                    'u' -> { //unicode escape
                         var charCode: Int
                         var temp = ""
                         for (i in 0..3) {
@@ -52,7 +53,7 @@ class Lexer(input: String) {
                             charCode = char.code
 
                             if (!((charCode in 48..57) || (charCode in 97..102) || (charCode in 65..70))) {
-                                throw InvalidUnicodeEscapeSequenceExeption("Invalid Unicode escape sequence.")
+                                throw InvalidUnicodeEscapeSequenceException("Invalid Unicode escape sequence.")
                             }
                             temp += char
                         }
@@ -70,7 +71,7 @@ class Lexer(input: String) {
             }
         }
 
-        throw UnterminatedStringExeption("The String is not terminated")
+        throw UnterminatedStringException("The String is not terminated")
     }
 
     private fun lexDefault(c: Char): Token {
@@ -104,12 +105,12 @@ class Lexer(input: String) {
         return Token.NUMBER_LIT(result.toString())
     }
 
-    @Throws(LiteralDoesNotExistExeption::class)
+    @Throws(LiteralDoesNotExistException::class)
     private fun lexLiteral(c: Char): Token {
         val resultBuilder = StringBuilder(c.toString())
 
         for (i in 0..2) {
-            if (!iter.hasNext()) throw LiteralDoesNotExistExeption("$resultBuilder Literal does not exist")
+            if (!iter.hasNext()) throw LiteralDoesNotExistException("$resultBuilder Literal does not exist")
             resultBuilder.append(iter.next())
         }
 
@@ -122,7 +123,7 @@ class Lexer(input: String) {
         } else if (result == "fals" && iter.next() == 'e') {
             return Token.BOOLEAN_LIT(false)
         }
-        throw LiteralDoesNotExistExeption("$result Literal does not exist")
+        throw LiteralDoesNotExistException("$result Literal does not exist")
     }
 
     fun peek(): Token {
@@ -139,8 +140,26 @@ class Lexer(input: String) {
         }
     }
 
-    class NotPermittedCharExeption(text: String) : Exception(text)
-    class InvalidUnicodeEscapeSequenceExeption(text: String) : Exception(text)
-    class UnterminatedStringExeption(text: String) : Exception(text)
-    class LiteralDoesNotExistExeption(text: String) : Exception(text)
+    class NotPermittedCharException(text: String) : Exception(text)
+    class InvalidUnicodeEscapeSequenceException(text: String) : Exception(text)
+    class UnterminatedStringException(text: String) : Exception(text)
+    class LiteralDoesNotExistException(text: String) : Exception(text)
+
+    class PeekableIterator<A>(private val iter: Iterator<A>) {
+        private var lookahead: A? = null
+        fun next(): A {
+            lookahead?.let { lookahead = null; return it }
+            return iter.next()
+        }
+
+        fun peek(): A {
+            val token = next()
+            lookahead = token
+            return token
+        }
+
+        fun hasNext(): Boolean {
+            return lookahead != null || iter.hasNext()
+        }
+    }
 }

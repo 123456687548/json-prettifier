@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import types.JsonDataType
 
 @ExperimentalStdlibApi
 internal class ParserTest {
@@ -109,13 +110,13 @@ internal class ParserTest {
     }
 
     @Test
-    fun testIlligals() {
+    fun testExceptions() {
         println("Running test: ${object {}.javaClass.enclosingMethod.name}\n")
 
-        error("tru", Lexer.LiteralDoesNotExistExeption::class.java)
-        error("trfsdu", Lexer.LiteralDoesNotExistExeption::class.java)
-        error("nsdf", Lexer.LiteralDoesNotExistExeption::class.java)
-        error("fsdf", Lexer.LiteralDoesNotExistExeption::class.java)
+        error("tru", Lexer.LiteralDoesNotExistException::class.java)
+        error("trfsdu", Lexer.LiteralDoesNotExistException::class.java)
+        error("nsdf", Lexer.LiteralDoesNotExistException::class.java)
+        error("fsdf", Lexer.LiteralDoesNotExistException::class.java)
     }
 
     private fun testCase(json: String, expectedResult: JsonDataType) {

@@ -1,3 +1,5 @@
+package types
+
 sealed class Token {
     override fun toString(): String {
         return this.javaClass.simpleName

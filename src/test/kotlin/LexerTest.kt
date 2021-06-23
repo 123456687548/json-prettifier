@@ -1,3 +1,4 @@
+import types.Token
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
@@ -122,13 +123,13 @@ internal class LexerTest {
     }
 
     @Test
-    fun testIlligals() {
+    fun testExceptions() {
         println("Running test: ${object {}.javaClass.enclosingMethod.name}\n")
 
-        error("tru", Lexer.LiteralDoesNotExistExeption::class.java)
-        error("trfsdu", Lexer.LiteralDoesNotExistExeption::class.java)
-        error("nsdf", Lexer.LiteralDoesNotExistExeption::class.java)
-        error("fsdf", Lexer.LiteralDoesNotExistExeption::class.java)
+        error("tru", Lexer.LiteralDoesNotExistException::class.java)
+        error("trfsdu", Lexer.LiteralDoesNotExistException::class.java)
+        error("nsdf", Lexer.LiteralDoesNotExistException::class.java)
+        error("fsdf", Lexer.LiteralDoesNotExistException::class.java)
     }
 
     private fun testCase(json: String, expectedResult: Token) {

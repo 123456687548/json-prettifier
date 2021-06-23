@@ -1,11 +1,15 @@
+import util.loadJsonFile
+import util.saveJsonFile
+import util.splitOutStream
+
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
     splitOutStream()
 
-    val jsonString : String = if(args.isEmpty()){
+    val jsonString: String = if (args.isEmpty()) {
         loadJsonFile()
     } else {
-//        loadJsonFile("variableTest.json")
+//        util.loadJsonFile("variableTest.json")
         loadJsonFile(args[0])
     }
 
@@ -32,7 +36,7 @@ fun benchmark(tests: Int) {
         val end = System.currentTimeMillis()
 
         resultList.add(end - start)
-        println("Prettiefier took: ${end - start} millisec.")
+        println("Prettifier took: ${end - start} millisec.")
     }
 
     var average = 0L

@@ -1,9 +1,11 @@
+import types.JsonDataType
+import types.Token
 import kotlin.jvm.Throws
 
 @ExperimentalStdlibApi
 class Parser(private val lexer: Lexer) {
 
-    @Throws(ParseExeption::class)
+    @Throws(ParseException::class)
     fun parse(): JsonDataType {
         return when (val token = lexer.peek()) {
             Token.LCURLY -> parseJsonObject()
@@ -24,13 +26,13 @@ class Parser(private val lexer: Lexer) {
                 lexer.next()
                 JsonDataType.JSON_NULL
             }
-            else -> throw ParseExeption("")
+            else -> throw ParseException("")
         }
     }
 
     private fun parseAttribute(): Pair<JsonDataType.JSON_STRING, JsonDataType> {
         val key = parse()
-        if (key !is JsonDataType.JSON_STRING) throw ParseExeption("key is not a string")
+        if (key !is JsonDataType.JSON_STRING) throw ParseException("key is not a string")
         expectNext<Token.COLON>("colon :")
         val value = parse()
         return Pair(key, value)
@@ -90,5 +92,5 @@ class Parser(private val lexer: Lexer) {
         return next
     }
 
-    class ParseExeption(text: String) : Exception(text)
+    class ParseException(text: String) : Exception(text)
 }
