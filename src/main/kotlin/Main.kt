@@ -2,23 +2,49 @@ import util.loadJsonFile
 import util.saveJsonFile
 import util.splitOutStream
 
+val DEFAULT_IN_FILE = "in.json"
+val DEFAULT_OUT_FILE = "out.json"
+
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
     splitOutStream()
 
-    val jsonString: String = if (args.isEmpty()) {
-        loadJsonFile()
-    } else {
-//        util.loadJsonFile("variableTest.json")
-        loadJsonFile(args[0])
+    var jsonSourceFile: String? = null
+    var outFile: String? = null
+
+    if (args.contains("--help")) {
+        println("-------------- JSON PRETTIFIER --------------")
+        println("-i <FilePath>: Define input file")
+        println("-o <FilePath>: Define output file")
+        println("-s           : Shorten JSON")
+        println("--help       : This help page")
+        println()
+        println("Default Values:")
+        println("Default input file : $DEFAULT_IN_FILE")
+        println("Default output file: $DEFAULT_OUT_FILE")
+        println("---------------------------------------------")
+
+        return
     }
 
-    val lexer = Lexer(jsonString)
-    val parser = Parser(lexer)
+    if (args.contains("-i")) {
+        val index = args.indexOf("-i")
+        jsonSourceFile = args[index + 1]
+    }
+    if (args.contains("-o")) {
+        val index = args.indexOf("-o")
+        outFile = args[index + 1]
+    }
 
-    val result = parser.parse().prettyPrint()
+    val jsonString = loadJsonFile(jsonSourceFile ?: DEFAULT_IN_FILE)
 
-    saveJsonFile(result)
+    val result = if (args.contains("-s")) {
+        Parser(Lexer(jsonString)).parse().shortenPrint()
+    } else {
+        Parser(Lexer(jsonString)).parse().prettyPrint()
+    }
+
+    saveJsonFile(result, outFile ?: DEFAULT_OUT_FILE)
 }
 
 @ExperimentalStdlibApi

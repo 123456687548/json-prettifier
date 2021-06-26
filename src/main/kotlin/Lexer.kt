@@ -58,7 +58,6 @@ class Lexer(input: String) {
                             temp += char
                         }
 
-
                         result.append((Integer.parseInt(temp, 16)).toChar())
                     }
                 }
