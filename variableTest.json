@@ -6,6 +6,7 @@
     "string-starting-with-other-chars": ",.-!§${}[] String :)",
     "string-with-punctuations": "éèaaee",
     "unicode-string": "\uFDFA",
+    "unicode-string-multiple": "\uFDFA 2 \uFDFA no code € ﴿ code: \uFDF2",
     "number": 1234,
     "decimal-number": 1234.567,
     "negative-number": -12,

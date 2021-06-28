@@ -7,7 +7,7 @@ sealed class JsonDataType {
 
     abstract fun getValue(): Any?
 
-    data class JSON_STRING(val string: String) : JsonDataType() {
+    data class JSON_STRING(val string: String, val unescapedUnicodeChars: List<Int> = listOf()) : JsonDataType() {
         override fun toString(): String {
             var result = string
                 .replace("\\", "\\\\")
@@ -18,13 +18,11 @@ sealed class JsonDataType {
                 .replace("\r", "\\r")
 
             if (Settings.get().unicode) {
-                val stringBuilder = StringBuilder()
-
-                result.forEach {
-                    stringBuilder.append(replaceCharWithUnicode(it))
+                if (unescapedUnicodeChars.isNotEmpty()) {
+                    unescapedUnicodeChars.asReversed().forEach {
+                        result = result.replaceRange(it, it + 1, replaceCharWithUnicode(result[it]))
+                    }
                 }
-
-                result = stringBuilder.toString()
             }
 
             return "\"${result}\""
@@ -174,7 +172,7 @@ fun getIndent(indent: Int): String {
 
 @ExperimentalStdlibApi
 fun replaceCharWithUnicode(char: Char): String {
-    if (char.code > 255) { //todo bereich besser eingrenzen
+    if (char.code > 255) {
         return "\\u${char.code.toString(16).uppercase()}"
     }
     return char.toString()

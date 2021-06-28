@@ -12,7 +12,7 @@ sealed class Token {
     object RSQUARE : Token()
     object COLON : Token()
 
-    data class STRING(val string: String) : Token()
+    data class STRING(val string: String, val unescapedUnicodeChars: List<Int> = listOf()) : Token()
 
     data class BOOLEAN_LIT(val bool: Boolean) : Token()
     data class NUMBER_LIT(val number: String) : Token()

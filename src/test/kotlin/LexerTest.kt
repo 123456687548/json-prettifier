@@ -15,7 +15,8 @@ internal class LexerTest {
         testCase("\"1234 Test\"", Token.STRING("1234 Test"))
         testCase("\"1234 Test 1234\"", Token.STRING("1234 Test 1234"))
         testCase("\"1234 Tes2t 1234\"", Token.STRING("1234 Tes2t 1234"))
-        testCase("\"hi \\uFDFA\"", Token.STRING("hi ﷺ"))
+        testCase("\"hi \\uFDFA\"", Token.STRING("hi ﷺ", listOf(3)))
+        testCase("\"hi \\uFDFA und \\uFDFA\"", Token.STRING("hi ﷺ und ﷺ", listOf(3, 9)))
         testCase("\"This String contains \\\"!§\$%&/{}[]()=?\\\\@€|><,.-;:_+#\\\"\"\"", Token.STRING("This String contains \"!§\$%&/{}[]()=?\\@€|><,.-;:_+#\""))
     }
 

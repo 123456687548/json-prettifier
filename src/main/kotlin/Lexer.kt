@@ -28,9 +28,12 @@ class Lexer(input: String) {
     @Throws(NotPermittedCharException::class, InvalidUnicodeEscapeSequenceException::class, UnterminatedStringException::class)
     private fun lexString(): Token {
         val result = StringBuilder()
+        val unescapedUnicodeChars = mutableListOf<Int>()
+        var index = -1
         var char: Char
         while (iter.hasNext()) {
             char = iter.next()
+            index++
 
             if (char.code < 32) {
                 throw NotPermittedCharException("Unescaped ASCII control characters are not permitted.")
@@ -58,12 +61,14 @@ class Lexer(input: String) {
                             temp += char
                         }
 
+                        unescapedUnicodeChars.add(index)
                         result.append((Integer.parseInt(temp, 16)).toChar())
                     }
                 }
             } else {
                 if (char == '"') { // end of string
-                    return Token.STRING(result.toString())
+                    return if (unescapedUnicodeChars.isEmpty()) Token.STRING(result.toString())
+                    else Token.STRING(result.toString(), unescapedUnicodeChars)
                 }
 
                 result.append(char)

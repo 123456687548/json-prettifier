@@ -12,7 +12,7 @@ class Parser(private val lexer: Lexer) {
             Token.LSQUARE -> parseJsonArray()
             is Token.STRING -> {
                 lexer.next()
-                JsonDataType.JSON_STRING(token.string)
+                JsonDataType.JSON_STRING(token.string, token.unescapedUnicodeChars)
             }
             is Token.BOOLEAN_LIT -> {
                 lexer.next()
