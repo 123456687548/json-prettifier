@@ -1,42 +1,50 @@
+import types.Settings
 import util.loadJsonFile
 import util.saveJsonFile
 import util.splitOutStream
-
-val DEFAULT_IN_FILE = "in.json"
-val DEFAULT_OUT_FILE = "out.json"
+import java.lang.NumberFormatException
 
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
     splitOutStream()
 
-    var jsonSourceFile: String? = null
-    var outFile: String? = null
-
     if (args.contains("--help")) {
-        println("-------------- JSON PRETTIFIER --------------")
-        println("-i <FilePath>: Define input file")
-        println("-o <FilePath>: Define output file")
-        println("-s           : Shorten JSON")
-        println("--help       : This help page")
-        println()
-        println("Default Values:")
-        println("Default input file : $DEFAULT_IN_FILE")
-        println("Default output file: $DEFAULT_OUT_FILE")
-        println("---------------------------------------------")
-
+        printHelp()
         return
+    }
+
+    if(args.contains("-sf")){
+        Settings.loadSettingsFile()
     }
 
     if (args.contains("-i")) {
         val index = args.indexOf("-i")
-        jsonSourceFile = args[index + 1]
+        Settings.get().inFile = args[index + 1]
     }
     if (args.contains("-o")) {
         val index = args.indexOf("-o")
-        outFile = args[index + 1]
+        Settings.get().outFile = args[index + 1]
+    }
+    if (args.contains("-it")) {
+        val index = args.indexOf("-it")
+        try {
+            Settings.get().indentType = Settings.IndentType.valueOf(args[index + 1].toUpperCase())
+        } catch (e: IllegalArgumentException) {
+            printHelp()
+            return
+        }
+    }
+    if (args.contains("-ia")) {
+        val index = args.indexOf("-ia")
+        try {
+            Settings.get().indentAmount = args[index + 1].toInt()
+        } catch (e: NumberFormatException) {
+            printHelp()
+            return
+        }
     }
 
-    val jsonString = loadJsonFile(jsonSourceFile ?: DEFAULT_IN_FILE)
+    val jsonString = loadJsonFile(Settings.get().inFile)
 
     val result = if (args.contains("-s")) {
         Parser(Lexer(jsonString)).parse().shortenPrint()
@@ -44,7 +52,26 @@ fun main(args: Array<String>) {
         Parser(Lexer(jsonString)).parse().prettyPrint()
     }
 
-    saveJsonFile(result, outFile ?: DEFAULT_OUT_FILE)
+    saveJsonFile(result, Settings.get().outFile)
+}
+
+@ExperimentalStdlibApi
+fun printHelp() {
+    println("-------------- JSON PRETTIFIER --------------")
+    println("-i <FilePath>         : Define input file")
+    println("-o <FilePath>         : Define output file")
+    println("-s                    : Shorten JSON")
+    println("-it <IndentType>      : Define IndentType (\"${Settings.IndentType.SPACE}\" / \"${Settings.IndentType.TAB}\")")
+    println("-ia <IndentAmount>    : Define IndentAmount")
+    println("-sf                   : Use settings file (settings.json)")
+    println("--help                : This help page")
+    println()
+    println("Default Values:")
+    println("Default input file    : ${Settings.DEFAULT_IN_FILE}")
+    println("Default output file   : ${Settings.DEFAULT_OUT_FILE}")
+    println("Default indent type   : ${Settings.DEFAULT_INDENT_TYPE}")
+    println("Default indent amount : ${Settings.DEFAULT_INDENT_AMOUNT}")
+    println("---------------------------------------------")
 }
 
 @ExperimentalStdlibApi

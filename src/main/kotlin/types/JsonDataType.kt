@@ -17,11 +17,9 @@ sealed class JsonDataType {
                 .replace("\n", "\\n")
                 .replace("\r", "\\r")
 
-            if (Settings.get().unicode) {
-                if (unescapedUnicodeChars.isNotEmpty()) {
-                    unescapedUnicodeChars.asReversed().forEach {
-                        result = result.replaceRange(it, it + 1, replaceCharWithUnicode(result[it]))
-                    }
+            if (unescapedUnicodeChars.isNotEmpty()) {
+                unescapedUnicodeChars.asReversed().forEach {
+                    result = result.replaceRange(it, it + 1, replaceCharWithEscapedUnicode(result[it]))
                 }
             }
 
@@ -171,9 +169,6 @@ fun getIndent(indent: Int): String {
 }
 
 @ExperimentalStdlibApi
-fun replaceCharWithUnicode(char: Char): String {
-    if (char.code > 255) {
-        return "\\u${char.code.toString(16).uppercase()}"
-    }
-    return char.toString()
+fun replaceCharWithEscapedUnicode(char: Char): String {
+    return "\\u${char.code.toString(16).uppercase()}"
 }
