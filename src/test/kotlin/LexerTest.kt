@@ -31,6 +31,9 @@ internal class LexerTest {
         testCase("-1", Token.NUMBER_LIT("-1"))
         testCase("-1.2", Token.NUMBER_LIT("-1.2"))
         testCase("1e10", Token.NUMBER_LIT("1e10"))
+        testCase("1E10", Token.NUMBER_LIT("1E10"))
+        testCase("1e+10", Token.NUMBER_LIT("1e+10"))
+        testCase("1e-10", Token.NUMBER_LIT("1e-10"))
     }
 
     @Test

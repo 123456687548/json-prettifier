@@ -96,12 +96,12 @@ class Lexer(input: String) {
         while (iter.hasNext()) {
             char = iter.peek()
 
-            if (!(char.isDigit() || (char == '.' || char == 'e'))) {
+            if (!(char.isDigit() || (char == '.' || char == 'e' || char == 'E' || char == '+' || char == '-'))) {
                 if (char == '.' && isDecimal) throw NumberFormatException("Number contains multiple dots")
                 break
             }
             iter.next()
-            if (char == '.' || char == 'e') isDecimal = true
+            if (char == '.' || char == 'e' || char == 'E') isDecimal = true
 
             result.append(char)
         }
